@@ -1,0 +1,8 @@
+streamlit>=1.50.0
+requests
+pandas
+plotly
+fastapi
+uvicorn
+scikit-learn
+joblib

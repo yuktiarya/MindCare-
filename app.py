@@ -13,7 +13,7 @@ import streamlit as st
 # --------------------------------------------------------------------------
 # Configuration
 # --------------------------------------------------------------------------
-API_URL = "http://127.0.0.1:8000/predict"
+API_URL = "https://mindcare-1-r9bj.onrender.com"
 API_TIMEOUT = 30  # seconds
 
 PAGES = ["Home", "Predict Mental Health", "About Project", "How It Works"]

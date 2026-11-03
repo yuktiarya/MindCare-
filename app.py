@@ -14,7 +14,7 @@ import streamlit as st
 # Configuration
 # --------------------------------------------------------------------------
 API_URL = "https://mindcare-1-r9bj.onrender.com/predict"
-API_TIMEOUT = 30  # seconds
+API_TIMEOUT = 120  # seconds; allow the hosted backend to wake from inactivity
 
 PAGES = ["Home", "Predict Mental Health", "About Project", "How It Works"]
 PAGE_ICONS = {
@@ -76,12 +76,48 @@ section[data-testid="stSidebar"] {
     background: linear-gradient(180deg, #ede7ff 0%, #e3eeff 100%);
     border-right: 1px solid #ddd3fb;
 }
+section[data-testid="stSidebar"] [data-testid="stRadio"] label,
+section[data-testid="stSidebar"] [data-testid="stRadio"] label p {
+    color: #4c1d95 !important;
+    opacity: 1 !important;
+}
+section[data-testid="stSidebar"] [data-testid="stRadio"] input {
+    accent-color: #7c3aed;
+}
 .brand { font-size: 1.7rem; font-weight: 800; color: #4c1d95; letter-spacing: -0.5px; }
 .brand-sub { color: #6b5b95; font-size: 0.9rem; line-height: 1.5; margin: 4px 0 18px 0; }
 .sidebar-note {
     margin-top: 24px; padding: 10px 14px; border-radius: 12px;
     background: rgba(255,255,255,0.7); color: #5b21b6; font-size: 0.82rem; font-weight: 600;
 }
+
+/* Form labels and controls need explicit light-theme colors. */
+[data-testid="stWidgetLabel"],
+[data-testid="stWidgetLabel"] p {
+    color: #4c1d95 !important;
+    opacity: 1 !important;
+}
+[data-testid="stNumberInputContainer"],
+[data-testid="stSelectbox"] [role="group"] {
+    background-color: #ffffff !important;
+    border-color: #d8ccfb !important;
+    color: #29243a !important;
+}
+[data-testid="stNumberInput"] input,
+div[data-testid="stSelectbox"] [role="combobox"] {
+    color: #29243a !important;
+    -webkit-text-fill-color: #29243a !important;
+}
+[data-testid="stNumberInputContainer"] button,
+[data-testid="stSelectbox"] button {
+    color: #4c1d95 !important;
+}
+[data-testid="stNumberInputContainer"] button svg,
+[data-testid="stSelectbox"] button svg {
+    fill: currentColor;
+}
+ul[role="listbox"] { background-color: #ffffff !important; }
+li[role="option"] { color: #29243a !important; }
 
 /* Hero */
 .hero-title { font-size: 3rem; font-weight: 800; line-height: 1.12; color: #2e1065; letter-spacing: -1.2px; margin: 8px 0 14px 0; }
@@ -268,7 +304,8 @@ def call_api(payload: dict) -> dict:
     except requests.exceptions.Timeout:
         return fail("Request timed out",
                     f"The backend did not respond within {API_TIMEOUT} seconds. "
-                    "Please try again.", "warning")
+                    "The hosted service may still be waking up or temporarily unavailable. "
+                    "Please try again shortly.", "warning")
     except requests.exceptions.RequestException as exc:
         return fail("Request failed", f"Unexpected network error: {exc}")
 
